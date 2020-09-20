@@ -12,7 +12,7 @@ export class UserRepositoryService {
         return user.id;
     }
 
-    public async findUser(attribute: string, value: string): Promise<IUserAttributes> {
+    public async findUser(attribute: string, value: string): Promise<IUserModel> {
         return await this.userModel.findOne({
             where: { [attribute]: value }
         });

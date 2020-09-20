@@ -39,3 +39,4 @@ userController.route('/:id').all(checkUser)
         await userService.deleteUser(id, softDelete);
         return res.sendStatus(200);
     });
+

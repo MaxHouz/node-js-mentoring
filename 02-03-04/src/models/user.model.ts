@@ -28,4 +28,6 @@ export const User = pgSequelize.define<IUserModel>('users', {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     }
-}, { timestamps: false });
+}, {
+    timestamps: false
+});
