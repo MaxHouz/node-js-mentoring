@@ -1,9 +1,9 @@
-import { IUserFull } from './src/models/user.model';
+import { IUserAttributes } from './user.interface';
 
 declare global {
     namespace Express {
         interface Request {
-            user?: IUserFull;
+            user?: IUserAttributes;
         }
     }
 }
