@@ -11,11 +11,7 @@ export const createGroupSchema = Joi.object({
     name: Joi.string().required(),
     permissions: Joi.array()
         .items(Joi.string().valid(
-            GroupPermission.delete,
-            GroupPermission.read,
-            GroupPermission.share,
-            GroupPermission.write,
-            GroupPermission.uploadFiles,
+            ...Object.values(GroupPermission)
         )).required()
 });
 
@@ -23,10 +19,6 @@ export const updateGroupSchema = Joi.object({
     name: Joi.string(),
     permissions: Joi.array()
         .items(Joi.string().valid(
-            GroupPermission.delete,
-            GroupPermission.read,
-            GroupPermission.share,
-            GroupPermission.write,
-            GroupPermission.uploadFiles,
+            ...Object.values(GroupPermission)
         ))
 });

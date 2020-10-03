@@ -14,7 +14,7 @@ groupController.get('/get-all', async (req, res) => {
     return res.json({ groups });
 });
 
-groupController.post('/add-users/:id', checkGroup, async (req, res) => {
+groupController.post('/groups/:id/users', checkGroup, async (req, res) => {
     const { group } = req;
     const userIds: string[] = req.body.users;
 

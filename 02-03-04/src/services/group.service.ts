@@ -38,11 +38,7 @@ export class GroupService {
         const transaction = await this.sequelize.transaction();
         try {
             for (const userId of userIds) {
-                const user = await this.userRepository.findUser('id', userId);
-                if (!user) {
-                    throw new Error(`User ${userId} was not found`);
-                }
-                await group.addUser(user, { transaction });
+                await group.addUser(userId, { transaction });
             }
             await transaction.commit();
         } catch (e) {

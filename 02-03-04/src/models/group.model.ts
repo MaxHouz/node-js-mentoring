@@ -17,11 +17,7 @@ export const Group = pgSequelize.define<IGroupModel>('groups', {
         type: DataTypes.ARRAY(
             DataTypes.ENUM({
                 values: [
-                    GroupPermission.delete,
-                    GroupPermission.read,
-                    GroupPermission.share,
-                    GroupPermission.write,
-                    GroupPermission.uploadFiles
+                    ...Object.values(GroupPermission)
                 ]
             })
         ),
