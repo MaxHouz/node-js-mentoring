@@ -1,4 +1,4 @@
-import { IUserAttributes, ICreateUserBody, IUpdateUserBody, IUserSafeData } from '../types/user.interface';
+import { ICreateUserBody, IUpdateUserBody, IUserSafeData, IUserModel } from '../types/user.interface';
 import { v4 as uuid4 } from 'uuid';
 import { userRepositoryService, UserRepositoryService } from '../data-access/userRepositoryService';
 
@@ -20,8 +20,8 @@ export class UserService {
         return !!await this.userRepository.findUser('login', login);
     }
 
-    public async getUserById(id: string): Promise<IUserAttributes> {
-        return await this.userRepository.findUser('id', id);
+    public async getUserById(id: string): Promise<IUserModel> {
+        return await this.userRepository.findUser('id', id).catch(_ => null);
     }
 
     public async updateUser(id: string, updatedUserData: IUpdateUserBody): Promise<void> {

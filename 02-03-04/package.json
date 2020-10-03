@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon",
-    "populate-db:users": "cd ./tools && tsc db-populate-users.ts && node db-populate-users.js && rimraf db-populate-users.js"
+    "db-migrate": "cd db-migration && sequelize-cli db:migrate",
+    "db-migrate:undo": "cd db-migration && sequelize-cli db:migrate:undo",
+    "db-seed": "cd db-migration && sequelize-cli db:seed:all"
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +31,7 @@
     "nodemon": "^2.0.3",
     "pg-format": "^1.0.4",
     "rimraf": "^3.0.2",
+    "sequelize-cli": "^6.2.0",
     "ts-node": "^8.10.1",
     "tslint": "^6.1.2",
     "typescript": "^3.8.3"
