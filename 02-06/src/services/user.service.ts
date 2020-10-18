@@ -24,6 +24,10 @@ export class UserService {
         return await this.userRepository.findUser('id', id).catch(_ => null);
     }
 
+    public async getUserByLogin(login: string): Promise<IUserModel> {
+        return await this.userRepository.findUser('login', login).catch(_ => null);
+    }
+
     public async updateUser(id: string, updatedUserData: IUpdateUserBody): Promise<void> {
         await this.userRepository.updateUser(id, updatedUserData);
     }

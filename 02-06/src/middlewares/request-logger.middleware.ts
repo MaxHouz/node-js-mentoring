@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { logger } from '../services/logger.service';
+import { logger } from '../services/logger.utils';
 
 export async function requestLogger(req: Request, res: Response, next: NextFunction) {
     const { method, url, params, body } = req;

@@ -1,8 +1,9 @@
 import express from 'express';
 import { userController } from './controllers/user.controller';
 import { groupController } from './controllers/group.controller';
-import { logger } from './services/logger.service';
+import { logger } from './services/logger.utils';
 import { requestLogger, unhandledErrorsLogger } from './middlewares/request-logger.middleware';
+import cors from 'cors';
 
 const app = express();
 const PORT = 3800;
@@ -16,6 +17,7 @@ process
     });
 
 app.use(express.json());
+app.use(cors());
 app.use(requestLogger);
 app.use(unhandledErrorsLogger);
 
