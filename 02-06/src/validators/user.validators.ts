@@ -25,3 +25,8 @@ export const updateUserSchema = Joi.object({
     password: Joi.string().min(8).regex(passwordRegexp).messages(passwordErrorMessages),
     age: Joi.number().min(4).max(140)
 })
+
+export const loginUserSchema = Joi.object({
+    login: Joi.string().required(),
+    password: Joi.string().min(8).regex(passwordRegexp).required().messages(passwordErrorMessages)
+});

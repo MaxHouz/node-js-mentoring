@@ -1,0 +1,4 @@
+{
+  "JWT_KEY": "Dev_test_jwt_key",
+  "TOKEN_EXPIRATION": "3d"
+}

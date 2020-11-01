@@ -1,22 +1,42 @@
 import { Router } from 'express';
 import { checkUser } from '../middlewares/check-user.middleware';
 import { uniqueLogin } from '../middlewares/unique-login.middleware';
-import { registerUserSchema, updateUserSchema, userValidator } from '../validators/user.validators';
+import { loginUserSchema, registerUserSchema, updateUserSchema, userValidator } from '../validators/user.validators';
 import { userService } from '../services/user.service';
-import { logExecutionError, logger } from '../services/logger.service';
+import { logExecutionError } from '../services/logger.utils';
+import { createToken, validatePassword } from '../services/auth.utils';
+import { jwtMiddleware } from '../middlewares/token.middleware';
 
 export const userController = Router();
 
 userController.post('/register', userValidator.body(registerUserSchema), uniqueLogin, async (req, res) => {
     try {
-        return res.json(await userService.addUser(req.body));
+        const id = await userService.addUser(req.body)
+        const token = createToken(id);
+        return res.json({ id, token });
     } catch (err) {
         logExecutionError('userService.addUser', [JSON.stringify(req.body)], err);
         return res.status(500).send(err.message);
     }
 });
 
-userController.patch('/restore/:id', checkUser, async (req, res) => {
+userController.post('/login', userValidator.body(loginUserSchema), async (req, res) => {
+    const { login, password } = req.body;
+    const user = await userService.getUserByLogin(login);
+
+    if(!user) {
+        return res.status(400).send(`${login} is not registered`);
+    }
+    if (!validatePassword(password, user.password)) {
+        return res.status(400).send('Invalid password.');
+    }
+
+    const token = createToken(user.id);
+
+    return res.json({ id: user.id, token });
+});
+
+userController.patch('/restore/:id', jwtMiddleware, checkUser, async (req, res) => {
     const { id } = req.params;
     try {
         await userService.restoreUser(id);
@@ -27,7 +47,7 @@ userController.patch('/restore/:id', checkUser, async (req, res) => {
     }
 });
 
-userController.get('/auto-suggest', async (req, res) => {
+userController.get('/auto-suggest', jwtMiddleware, async (req, res) => {
     // ?value=use&limit=3
     const substr = req.query?.value?.toString() || '';
     const limit = parseInt(req.query?.limit?.toString() || '3', 10);
@@ -40,7 +60,7 @@ userController.get('/auto-suggest', async (req, res) => {
     }
 });
 
-userController.route('/:id').all(checkUser)
+userController.route('/:id').all(jwtMiddleware, checkUser)
     .get((req, res) => {
         const { id, login, age } = req.user;
         return res.json({ id, login, age });
