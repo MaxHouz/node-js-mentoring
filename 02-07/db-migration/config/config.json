@@ -6,5 +6,13 @@
     "host": "127.0.0.1",
     "port": "5432",
     "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": 1111,
+    "database": "node-mentoring-test",
+    "host": "127.0.0.1",
+    "port": "5432",
+    "dialect": "postgres"
   }
 }

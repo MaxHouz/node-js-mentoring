@@ -1,4 +1,12 @@
 {
+  "ENVIRONMENT": "development",
   "JWT_KEY": "Dev_test_jwt_key",
-  "TOKEN_EXPIRATION": "3d"
+  "TOKEN_EXPIRATION": "3d",
+  "DB_NAME": "node-mentoring",
+  "DB_USER": "postgres",
+  "DB_PASSWORD": "1111",
+  "DB_HOST": "localhost",
+  "DB_PORT": 5432,
+  "SERVER_PORT": 3800,
+  "ENABLE_LOGS": true
 }

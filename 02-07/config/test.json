@@ -1,0 +1,12 @@
+{
+  "ENVIRONMENT": "integration-test",
+  "JWT_KEY": "Dev_test_jwt_key",
+  "TOKEN_EXPIRATION": "1h",
+  "DB_NAME": "node-mentoring-test",
+  "DB_USER": "postgres",
+  "DB_PASSWORD": "1111",
+  "DB_HOST": "localhost",
+  "DB_PORT": 5432,
+  "SERVER_PORT": 3801,
+  "ENABLE_LOGS": false
+}

@@ -1,4 +1,5 @@
 import { createLogger, format, transports } from 'winston';
+import config from 'config';
 
 export const logger = createLogger({
     transports: [
@@ -7,7 +8,8 @@ export const logger = createLogger({
             format: format.combine(
                 format.colorize(),
                 format.simple()
-            )
+            ),
+            silent: !config.get('ENABLE_LOGS')
         })
     ]
 });

@@ -6,6 +6,7 @@ declare global {
         interface Request {
             user?: IUserModel;
             group?: IGroupModel;
+            userId?: string;
         }
     }
 }
