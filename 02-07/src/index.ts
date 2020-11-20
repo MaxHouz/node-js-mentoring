@@ -1,9 +1,11 @@
 import express from 'express';
+import 'express-async-errors';
 import { userController } from './controllers/user.controller';
 import { groupController } from './controllers/group.controller';
 import { logger } from './services/logger.utils';
 import { requestLogger, unhandledErrorsLogger } from './middlewares/request-logger.middleware';
 import cors from 'cors';
+import { handleError } from './middlewares/handle-error.middleware';
 
 const app = express();
 const PORT = 3800;
@@ -23,6 +25,8 @@ app.use(unhandledErrorsLogger);
 
 app.use('/user', userController);
 app.use('/group', groupController);
+
+app.use(handleError);
 
 app.listen(PORT, _ => {
     logger.info(`Server listening on port ${PORT}`);

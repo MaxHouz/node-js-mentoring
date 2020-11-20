@@ -8,6 +8,6 @@ export async function requestLogger(req: Request, res: Response, next: NextFunct
 }
 
 export async function unhandledErrorsLogger(err: Error, req: Request, res: Response, next: NextFunction) {
-    logger.error(err.stack);
-    res.status(500).send('Internal Server Error');
+    logger.error(err.message);
+    next();
 }
