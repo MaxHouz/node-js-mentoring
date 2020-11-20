@@ -4,7 +4,8 @@ import { uniqueLogin } from '../middlewares/unique-login.middleware';
 import { loginUserSchema, registerUserSchema, updateUserSchema, userValidator } from '../validators/user.validators';
 import { userService } from '../services/user.service';
 import { createToken, validatePassword } from '../services/auth.utils';
-import { jwtMiddleware } from '../middlewares/token.middleware';
+import { authMiddleware } from '../middlewares/auth.middleware';
+import { ErrorMessages, HttpError, insertMessageValues } from '../services/error-handling.utils';
 
 export const userController = Router();
 
@@ -19,10 +20,10 @@ userController.post('/login', userValidator.body(loginUserSchema), async (req, r
     const user = await userService.getUserByLogin(login);
 
     if(!user) {
-        return res.status(400).send(`${login} is not registered`);
+        throw new HttpError(403, insertMessageValues(ErrorMessages.unregisteredUser, login));
     }
     if (!validatePassword(password, user.password)) {
-        return res.status(400).send('Invalid password.');
+        throw new HttpError(403, ErrorMessages.invalidPassword);
     }
 
     const token = createToken(user.id);
@@ -30,14 +31,14 @@ userController.post('/login', userValidator.body(loginUserSchema), async (req, r
     return res.json({ id: user.id, token });
 });
 
-userController.patch('/restore/:id', jwtMiddleware, checkUser, async (req, res) => {
+userController.patch('/restore/:id', authMiddleware, checkUser, async (req, res) => {
     const { id } = req.params;
 
     await userService.restoreUser(id);
     return res.sendStatus(200);
 });
 
-userController.get('/auto-suggest', jwtMiddleware, async (req, res) => {
+userController.get('/auto-suggest', authMiddleware, async (req, res) => {
     // ?value=use&limit=3
     const substr = req.query?.value?.toString() || '';
     const limit = parseInt(req.query?.limit?.toString() || '3', 10);
@@ -45,7 +46,7 @@ userController.get('/auto-suggest', jwtMiddleware, async (req, res) => {
     return res.json(await userService.getAutoSuggestUsers(substr, limit));
 });
 
-userController.route('/:id').all(jwtMiddleware, checkUser)
+userController.route('/:id').all(authMiddleware, checkUser)
     .get((req, res) => {
         const { id, login, age } = req.user;
         return res.json({ id, login, age });

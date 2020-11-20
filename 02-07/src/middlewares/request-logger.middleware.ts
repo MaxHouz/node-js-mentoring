@@ -6,8 +6,3 @@ export async function requestLogger(req: Request, res: Response, next: NextFunct
     logger.info(`${method} ${url} params: ${JSON.stringify(params)} body: ${JSON.stringify(body)}`);
     next();
 }
-
-export async function unhandledErrorsLogger(err: Error, req: Request, res: Response, next: NextFunction) {
-    logger.error(err.message);
-    next();
-}

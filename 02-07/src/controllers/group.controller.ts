@@ -2,20 +2,20 @@ import { Router } from 'express';
 import { checkGroup } from '../middlewares/check-group.middleware';
 import { groupService } from '../services/group.service';
 import { createGroupSchema, groupValidator, updateGroupSchema } from '../validators/group.validator';
-import { jwtMiddleware } from '../middlewares/token.middleware';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
 export const groupController = Router();
 
-groupController.post('/create', jwtMiddleware, groupValidator.body(createGroupSchema), async (req, res) => {
-    return res.json(await groupService.addGroup(req.body));
+groupController.post('/create', authMiddleware, groupValidator.body(createGroupSchema), async (req, res) => {
+    return res.json({ id: await groupService.addGroup(req.body) });
 });
 
-groupController.get('/get-all', jwtMiddleware, async (req, res) => {
+groupController.get('/get-all', authMiddleware, async (req, res) => {
     const groups = await groupService.getAll();
     return res.json({ groups });
 });
 
-groupController.post('/groups/:id/users', jwtMiddleware, checkGroup, async (req, res) => {
+groupController.post('/groups/:id/users', authMiddleware, checkGroup, async (req, res) => {
     const { group } = req;
     const userIds: string[] = req.body.users;
 
@@ -23,7 +23,7 @@ groupController.post('/groups/:id/users', jwtMiddleware, checkGroup, async (req,
     return res.sendStatus(200);
 });
 
-groupController.route('/:id').all(jwtMiddleware, checkGroup)
+groupController.route('/:id').all(authMiddleware, checkGroup)
     .get((req, res) => {
         return res.json(req.group);
     })

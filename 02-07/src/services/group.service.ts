@@ -3,7 +3,7 @@ import { ICreateGroupBody, IGroupAttributes, IGroupModel, IUpdateGroupBody } fro
 import { v4 as uuid4 } from 'uuid';
 import { pgSequelize } from '../postgres';
 import { Sequelize } from 'sequelize';
-import { ErrorHandler, logAsyncMethodErrors } from './error-handling.utils';
+import { HttpError, logAsyncMethodErrors } from './error-handling.utils';
 
 export class GroupService {
     constructor(
@@ -15,7 +15,6 @@ export class GroupService {
     @logAsyncMethodErrors('groupService.addGroup')
     public async addGroup(groupData: ICreateGroupBody): Promise<string> {
         const id = uuid4();
-        throw Error('ljdsfsljkf');
         return await this.groupRepository.insertGroup({id, ...groupData});
     }
 
@@ -49,7 +48,7 @@ export class GroupService {
             await transaction.commit();
         } catch (e) {
             await transaction.rollback();
-            throw new ErrorHandler(400, 'Failed to add users');
+            throw new HttpError(400, 'Failed to add users');
         }
     }
 

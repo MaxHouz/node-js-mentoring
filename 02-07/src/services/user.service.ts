@@ -20,8 +20,9 @@ export class UserService {
     }
 
     @logAsyncMethodErrors('userService.isLoginUsed')
-    public async isLoginUsed(login: string): Promise<boolean> {
-        return !!await this.userRepository.findUser('login', login);
+    public async isLoginUsed(login: string, id: string): Promise<boolean> {
+        const user = await this.userRepository.findUser('login', login)
+        return !!user && user.id !== id;
     }
 
     @logAsyncMethodErrors('userService.getUserById')

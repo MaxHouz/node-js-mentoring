@@ -1,7 +1,17 @@
 import { Sequelize } from 'sequelize';
+import config from 'config';
 
-export const pgSequelize = new Sequelize('postgres://postgres:1111@localhost:5432/node-mentoring');
+const dbName = config.get<string>('DB_NAME');
+const dbUser: string = config.get<string>('DB_USER');
+const dbPassword = config.get<string>('DB_PASSWORD');
+const logging = config.get<boolean>('ENABLE_LOGS');
+const port = config.get<number>('DB_PORT');
+const host = config.get<string>('DB_HOST');
+const dialect = 'postgres';
 
-pgSequelize.authenticate()
-    .then(() => console.log('DB connection has been established successfully.'))
-    .catch(error => console.error('Unable to connect to the database:', error));
+export const pgSequelize = new Sequelize(dbName, dbUser, dbPassword, {
+    dialect,
+    port,
+    host,
+    logging
+});
